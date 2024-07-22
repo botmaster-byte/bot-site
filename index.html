@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotMaster - Bot per Telegram e Discord</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #0f0c29;
+        }
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 1rem;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #00f7ff;
+        }
+        main {
+            margin-top: 80px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+        section {
+            padding: 4rem 0;
+            margin: 20px 0;
+        }
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        #hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+        #hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .feature-grid, .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-item, .showcase-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .feature-item:hover, .showcase-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .feature-item img, .showcase-item img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        #pricing {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .pricing-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00f7ff, #00ff95);
+        }
+        .pricing-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .pricing-item h3 {
+            font-size: 2rem;
+            color: #00f7ff;
+            text-transform: uppercase;
+        }
+        .platform {
+            font-size: 1.2rem;
+            color: #00ff95;
+            margin-bottom: 1rem;
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,247,255,0.5);
+        }
+        .pricing-item ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .pricing-item ul li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .pricing-item ul li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #00ff95;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(90deg, #00f7ff, #00ff95);
+            color: #0f0c29;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+        }
+        .cta-button:hover {
+            background: linear-gradient(90deg, #00ff95, #00f7ff);
+            box-shadow: 0 6px 20px rgba(0, 247, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">BotMaster</div>
+            <ul>
+                <li><a href="#features">Caratteristiche</a></li>
+                <li><a href="#showcase">Esempi</a></li>
+                <li><a href="#pricing">Prezzi</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1>Potenzia la tua presenza online con i nostri Bot</h1>
+            <p>Bot intelligenti per Telegram e Discord che semplificano la tua vita digitale</p>
+            <a href="#pricing" class="cta-button">Inizia Ora</a>
+        </section>
+
+        <section id="features">
+            <h2>Caratteristiche Principali</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2300f7ff' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z'/%3E%3C/svg%3E" alt="Automazione">
+                    <h3>Automazione Intelligente</h3>
+                    <p>Ottimizza le tue operazioni con risposte automatiche e gestione dei compiti</p>
+                </div>
+                <div class="feature-item">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2300f7ff' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'/%3E%3C/svg%3E" alt="AI">
+                    <h3>AI Avanzata</h3>
+                    <p>Utilizza algoritmi di apprendimento per interazioni sempre più naturali</p>
+                </div>
+                <div class="feature-item">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2300f7ff' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-8c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z'/%3E%3C/svg%3E" alt="Personalizzazione">
+                    <h3>Personalizzazione Totale</h3>
+                    <p>Adatta ogni aspetto del bot alle tue esigenze specifiche</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="showcase">
+            <h2>I Nostri Bot in Azione</h2>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <h3>Moderazione Proattiva</h3>
+                    <p>Mantieni la tua community sicura con il nostro bot di moderazione avanzato</p>
+                </div>
+                <div class="showcase-item">
+                    <h3>Supporto Clienti 24/7</h3>
+                    <p>Offri assistenza immediata con il nostro bot di supporto sempre attivo</p>
+                </div>
+                <div class="showcase-item">
+                    <h3>Engagement Ludico</h3>
+                    <p>Aumenta il coinvolgimento con giochi interattivi e quiz personalizzati</p>
+                </div>
+                <div class="showcase-item">
+                    <h3>Analisi Dati in Tempo Reale</h3>
+                    <p>Ottieni insights preziosi sull'attività della tua community</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing">
+            <h2>Piani e Prezzi</h2>
+            <div class="pricing-grid">
+                <div class="pricing-item">
+                    <h3>Base</h3>
+                    <p class="platform">Telegram</p>
+                    <p class="price">€99,00</p>
+                    <ul>
+                        <li>Funzionalità di base</li>
+                        <li>Supporto email</li>
+                        <li>Personalizzazione limitata</li>
+                    </ul>
+                    <a href="#" class="cta-button">Acquista Ora</a>
+                </div>
+                <div class="pricing-item">
+                    <h3>Avanzato</h3>
+                    <p class="platform">Telegram</p>
+                    <p class="price">€179,00</p>
+                    <ul>
+                        <li>Tutte le funzionalità</li>
+                        <li>Supporto email</li>
+                        <li>Aggiornamenti per 3 mesi</li>
+                        <li>Personalizzazione completa</li>
+                    </ul>
+                    <a href="#" class="cta-button">Acquista Ora</a>
+                </div>
+                <div class="pricing-item">
+                    <h3>Base</h3>
+                    <p class="platform">Discord</p>
+                    <p class="price">€119,00</p>
+                    <ul>
+                        <li>Funzionalità di base</li>
+                        <li>Supporto email</li>
+                        <li>Personalizzazione limitata</li>
+                    </ul>
+                    <a href="#" class="cta-button">Acquista Ora</a>
+                </div>
+				<div class="pricing-item">
+                    <h3>Avanzato</h3>
+                    <p class="platform">Discord</p>
+                    <p class="price">€199,00</p>
+                    <ul>
+                        <li>Tutte le funzionalità</li>
+                        <li>Supporto email</li>
+                        <li>Aggiornamenti per 3 mesi</li>
+                        <li>Personalizzazione completa</li>
+                    </ul>
+                    <a href="#" class="cta-button">Acquista Ora</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 BotMaster. Tutti i diritti riservati.</p>
+    </footer>
+    <script>
+        // Smooth scrolling per i link interni
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smoo
